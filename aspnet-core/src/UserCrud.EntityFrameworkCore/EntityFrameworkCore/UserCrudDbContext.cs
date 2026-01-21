@@ -14,9 +14,7 @@ public class UserCrudDbContext : AbpZeroDbContext<Tenant, Role, User, UserCrudDb
         : base(options)
     {
     }
-    public DbSet<Collage.CollageEntity> CollageEntities { get; set; }
+    public DbSet<Collage.Collage> Colleges { get; set; }
     public DbSet<Students.Student> Students { get; set; }
-
-    public DbSet<Studentsss.Studentss> Studentsses { get; set; }
 
     }

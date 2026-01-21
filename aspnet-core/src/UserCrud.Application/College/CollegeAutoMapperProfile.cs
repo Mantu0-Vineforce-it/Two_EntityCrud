@@ -1,20 +1,15 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserCrud.College.Dto;
+using UserCrud.Collage.Dto;
 
 namespace UserCrud.Collage
 {
-    public class CollageAutoMapperProfile : Profile
+    public class CollageMapProfile : Profile
     {
-        public CollageAutoMapperProfile()
+        public CollageMapProfile()
         {
-            CreateMap<Collage.CollageEntity, CollageDto>();
-            CreateMap<CreateCollege, Collage.CollageEntity>();
-            CreateMap<UpdateCollege, Collage.CollageEntity>();
+            CreateMap<Collage, CollegeDto>();
+            CreateMap<CreateCollege, Collage>();
+            CreateMap<UpdateCollege, Collage>();
         }
     }
 }

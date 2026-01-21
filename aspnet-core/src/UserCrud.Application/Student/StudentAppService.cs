@@ -2,15 +2,13 @@
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using UserCrud.Authorization;
 using UserCrud.Student.Dto;
 using UserCrud.Students;
-using Abp.UI;
-using System;
-using UserCrud.Studentsss;
-
 
 namespace UserCrud.Student
 {
@@ -18,99 +16,71 @@ namespace UserCrud.Student
     public class StudentAppService : ApplicationService, IStudentAppService
     {
         private readonly IRepository<Students.Student, int> _studentRepository;
-        private readonly IRepository<Studentsss.Studentss, int> _studentsRepository;
+        private readonly IRepository<Collage.Collage, int> _collegeRepository;
 
-
-        public StudentAppService(IRepository<Students.Student, int> studentRepository, IRepository<Studentsss.Studentss, int> studentsRepository)
+        public StudentAppService(
+            IRepository<Students.Student, int> studentRepository,
+            IRepository<Collage.Collage, int> collegeRepository)
         {
             _studentRepository = studentRepository;
-            _studentsRepository = studentsRepository;
+            _collegeRepository = collegeRepository;
         }
 
-
-        public async Task<Studentss> CreateStudentssssAsync(Studentss student)
-        {
-            try
-            {
-
-                // Insert entity into repository
-                await _studentsRepository.InsertAsync(student);
-
-                return student; // The student now has its ID populated
-            }
-            catch (Exception ex)
-            {
-                // Optional: log the original exception
-                throw new UserFriendlyException($"Failed to create Student: {ex.Message}");
-            }
-        }
-
-
+        // ✅ Get All with College Name
         public async Task<List<StudentDto>> GetAllAsync()
         {
+            var students = await _studentRepository
+                .GetAll()
+                .Include(x => x.College)
+                .ToListAsync();
 
-            try
+            var result = students.Select(x => new StudentDto
             {
-                var students = await _studentRepository.GetAllListAsync();
-                var data = ObjectMapper.Map<List<StudentDto>>(students);
-                return data;
-            }
-            catch (Exception)
-            {
-                throw new UserFriendlyException(
-                    "unable to fatch the student at Movement.Please try Again Later");
-            }
+                Id = x.Id,
+                Name = x.Name,
+                Email = x.Email,
+                Age = x.Age,
+                CollegeId = x.CollegeId,
+                CollegeName = x.College.Name
+            }).ToList();
+
+            return new List<StudentDto>(result);
         }
 
-        public async Task<Students.Student> CreateAsync(CreateStudentDto input)
+        // ✅ Create
+        public async Task<StudentDto> CreateAsync(CreateStudentDto input)
         {
-            if (input == null)
-                throw new UserFriendlyException("Input cannot be null");
+            var college = await _collegeRepository.FirstOrDefaultAsync(input.CollegeId);
+            if (college == null)
+                throw new UserFriendlyException("Invalid College");
 
-            try
-            {
-                // Map DTO to entity
-                var student = ObjectMapper.Map<Students.Student>(input);
+            var student = ObjectMapper.Map<Students.Student>(input);
 
-                // Insert entity into repository
-                await _studentRepository.InsertAsync(student);
+            await _studentRepository.InsertAsync(student);
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-                // At this point, in ABP application services, 
-                // the Unit of Work will automatically save changes
-                // when the method completes successfully.
-
-                return student; // The student now has its ID populated
-            }
-            catch (Exception ex)
-            {
-                // Optional: log the original exception
-                throw new UserFriendlyException($"Failed to create Student: {ex.Message}");
-            }
+            return ObjectMapper.Map<StudentDto>(student);
         }
 
 
-        public async Task<Students.Student> UpdateAsync(UpdateStudentDto input)
+        // ✅ Update
+        public async Task<StudentDto> UpdateAsync(UpdateStudentDto input)
         {
-            try
-            {
-                var student = await _studentRepository.GetAsync(input.Id);
-                ObjectMapper.Map(input, student);
-                return await _studentRepository.UpdateAsync(student);
-            }
-            catch (Exception)
-            {
-                throw new UserFriendlyException("Unable to update Student Details");
-            }
+            var student = await _studentRepository.GetAsync(input.Id);
+
+            var collegeExists = await _collegeRepository.FirstOrDefaultAsync(input.CollegeId);
+            if (collegeExists == null)
+                throw new UserFriendlyException("Invalid College");
+
+            ObjectMapper.Map(input, student);
+            await _studentRepository.UpdateAsync(student);
+
+            return ObjectMapper.Map<StudentDto>(student);
         }
 
         public async Task DeleteAsync(EntityDto<int> input)
         {
-            try
-            { await _studentRepository.DeleteAsync(input.Id); }
-            catch (Exception)
-            {
-                throw new UserFriendlyException("Unable to delete the Student");
-            }
+            await _studentRepository.DeleteAsync(input.Id);
         }
     }
 }

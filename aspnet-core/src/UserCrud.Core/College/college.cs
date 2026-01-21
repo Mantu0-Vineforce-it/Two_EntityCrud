@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UserCrud.Collage
 {
-    public class CollageEntity : FullAuditedEntity<int>
+    public class Collage : FullAuditedEntity<int>
     {
 
         public string Name { get; set; }
@@ -15,11 +15,11 @@ namespace UserCrud.Collage
         public long PhoneNumber { get; set; }
 
         public bool IsActive { get; set; }
-        protected CollageEntity()
+        protected Collage()
         {
             // EF Core
         }
-        public CollageEntity(
+        public Collage(
             string name,
             string address,
             long phoneNumber)

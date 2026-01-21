@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities.Auditing;
 using System.ComponentModel.DataAnnotations.Schema;
+using UserCrud.Collage;
 
 namespace UserCrud.Students
 {
@@ -12,7 +13,9 @@ namespace UserCrud.Students
         public int CollegeId { get; set; }
 
         [ForeignKey(nameof(CollegeId))]
-        public Collage.CollageEntity CollageEntity { get; set; }
+        public Collage.Collage College { get; set; }
+
+        public bool IsActive { get; set; }
 
         protected Student() { }
 
@@ -22,7 +25,7 @@ namespace UserCrud.Students
             Email = email;
             Age = age;
             CollegeId = collegeId;
-           
+            IsActive = true;
         }
     }
 }

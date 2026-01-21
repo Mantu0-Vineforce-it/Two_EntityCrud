@@ -1,17 +1,18 @@
-﻿using Abp.Application.Services.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserCrud.College.Dto
+namespace UserCrud.Collage.Dto
 {
-    public class UpdateCollege:FullAuditedEntityDto<int>
+    public class UpdateCollege
     {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
         public string Address { get; set; }
         public long PhoneNumber { get; set; }
-    
+
+        public bool IsActive { get; set; }
     }
 }
