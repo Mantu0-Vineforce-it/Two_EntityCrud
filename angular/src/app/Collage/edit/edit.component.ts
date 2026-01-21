@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponentBase } from '../../../shared/app-component-base';
 import {
   
-  UpdateCollegeDto,
+  UpdateCollege,
   CollageServiceProxy,
 } from '../../../shared/service-proxies/service-proxies';
 
@@ -39,7 +39,7 @@ export class EditCollageComponent
   saving = false;
   id!: number;
 
-  collage: UpdateCollegeDto = new UpdateCollegeDto();
+  collage: UpdateCollege = new UpdateCollege();
 
   onSave = output<EventEmitter<any>>();
 

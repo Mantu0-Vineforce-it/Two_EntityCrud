@@ -86,12 +86,12 @@ throw new Error('Method not implemented.');
 
   delete(student: StudentDto): void {
     abp.message.confirm(
-      this.l('StudentDeleteWarningMessage', student.name),
+      ('StudentDeleteWarningMessage'),
       undefined,
       (result: boolean) => {
         if (result) {
           this._studentService.delete(student.id).subscribe(() => {
-            abp.notify.success(this.l('SuccessfullyDeleted'));
+            abp.notify.success(('SuccessfullyDeleted'));
             this.refresh();
           });
         }

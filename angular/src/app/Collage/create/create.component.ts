@@ -17,7 +17,7 @@ import { LocalizePipe } from '../../../shared/pipes/localize.pipe';
 
 import { AppComponentBase } from '../../../shared/app-component-base';
 import {
-  CreateCollegeDto,
+  CreateCollege,
   CollegeDto,
   CollageServiceProxy
 } from '../../../shared/service-proxies/service-proxies';
@@ -59,7 +59,7 @@ export class CreateCollageDialogComponent
   save(): void {
     this.saving = true;
 
-    const input = new CreateCollegeDto();
+    const input = new CreateCollege();
     input.init(this.collage);
 
     this._collageService.create(input).subscribe(

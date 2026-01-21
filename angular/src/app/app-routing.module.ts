@@ -20,6 +20,18 @@ import { AppComponent } from './app.component';
                         loadChildren: () => import('./about/about.module').then((m) => m.AboutModule),
                         canActivate: [AppRouteGuard],
                     },
+                     {
+                        path: 'Student',
+                        loadChildren: () => import('./Student/student.module').then((m) => m.StudentModule),
+                        canActivate: [AppRouteGuard],
+                        
+                    },
+                    {
+                        path: 'Collage',
+                        loadChildren: () => import('./collage/collage.module').then((m) => m.CollageModule),
+                        canActivate: [AppRouteGuard],
+                        
+                    },
                     {
                         path: 'users',
                         loadChildren: () => import('./users/users.module').then((m) => m.UsersModule),
@@ -32,12 +44,7 @@ import { AppComponent } from './app.component';
                         data: { permission: 'Pages.Roles' },
                         canActivate: [AppRouteGuard],
                     },
-                    {
-                        path: 'student',
-                        loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
-                        data: { permission: 'Pages.Roles' },
-                        
-                    },
+                   
                     {
                         path: 'roles',
                         loadChildren: () => import('./roles/roles.module').then((m) => m.RolesModule),
